@@ -1,0 +1,2 @@
+[workspace]
+members = ["self-rust-tokenize", "self-rust-tokenize-derive"]

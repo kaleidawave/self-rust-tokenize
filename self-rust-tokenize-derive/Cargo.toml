@@ -1,0 +1,20 @@
+[package]
+name = "self-rust-tokenize-derive"
+description = "Turns instances of Rust structures into a token stream that creates the instance"
+authors = [ "Ben <kaleidawave@gmail.com>" ]
+version = "0.0.0"
+license = "MIT"
+edition = "2018"
+repository = "https://github.com/kaleidawave/self-rust-tokenize"
+
+[lib]
+name = "self_rust_tokenize_derive"
+proc-macro = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+proc-macro2 = "1.0"
+quote = "1.0.10"
+syn = { version = "1.0.81", features = ["full", "extra-traits"] }
+syn-helpers = "0.2.1"
