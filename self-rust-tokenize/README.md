@@ -2,7 +2,7 @@
 
 [![](https://img.shields.io/crates/v/self-rust-tokenize)](https://crates.io/crates/self-rust-tokenize)
 
-For taking a instance of a structure and generating a `proc_macro2::TokenStream` of tokens which generate the structure
+For taking a instance of a structure and generating a `proc_macro2::TokenStream` of tokens which generate the structure.
 
 ```rust
 self_rust_tokenize::SelfRustTokenize::to_tokens(String::new("Hello")) === quote!(String::new("Hello"));
@@ -18,7 +18,9 @@ let a = A(12);
 self_rust_tokenize::SelfRustTokenize::to_tokens(a) == quote!(A(12));
 ```
 
-The use case may be: sharing a structure between a crate that deals with instances of it and a proc macro crate which generates tokens that build the instances in a exported proc macro
+The use case may be: sharing a structure between a crate that deals with instances of it and a proc macro crate which generates tokens that build the instances in a exported proc macro.
+
+It can be used for doing constant compilation of structures that allocate due to the nature of the structure. (this crate was built for the partial constant compilation of abstract syntax trees).
 
 ```rust
 /// Base definition crate
