@@ -8,7 +8,7 @@ on:
         required: false
         default: "patch"
       derive-version:
-        description: "major/minor/patch or semver for derive crate (or none if not updating derive crate)"
+        description: "major/minor/patch or semver for derive crate (or none if not releasing derive crate)"
         required: false
         default: "none"
 
@@ -22,7 +22,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
       - name: Publish derive crate
-        uses: kaleidawave/crates-release-gh-action@v1
+        uses: kaleidawave/crates-release-gh-action@main
         if: ${{ github.event.inputs.derive-version != 'none' }}
         id: release-derive
         with:
@@ -32,12 +32,9 @@ jobs:
       - name: Wait for crates.io to sync
         if: ${{ github.event.inputs.derive-version != 'none' }}
         run: |
-          sleep 60
-          echo "Logging for issue:"
-          cat self-rust-tokenize-derive/Cargo.toml
-          cat self-rust-tokenize/Cargo.toml
+          sleep 10
       - name: Publish crate
-        uses: kaleidawave/crates-release-gh-action@v1
+        uses: kaleidawave/crates-release-gh-action@main
         id: release
         with:
           version: ${{ github.event.inputs.version }}
