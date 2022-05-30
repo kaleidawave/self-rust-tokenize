@@ -77,6 +77,13 @@ impl<T: SelfRustTokenize, const N: usize> SelfRustTokenize for [T; N] {
     }
 }
 
+impl<T: SelfRustTokenize> SelfRustTokenize for [T] {
+    fn to_tokens(&self) -> TokenStream {
+        let inner_tokens = self.iter().map(SelfRustTokenize::to_tokens);
+        quote!(&[#(#inner_tokens),*])
+    }
+}
+
 impl SelfRustTokenize for () {
     fn to_tokens(&self) -> TokenStream {
         quote!(())
@@ -92,7 +99,7 @@ macro_rules! tuple_impls {
                 #[allow(non_snake_case)]
                 let ($($name,)+) = self;
                 let inner_tokens = &[$(SelfRustTokenize::to_tokens($name)),+];
-                quote!((#(#inner_tokens),*))
+                quote!((#(#inner_tokens,)*))
             }
         }
     };
@@ -110,6 +117,40 @@ tuple_impls! { A B C D E F G H I }
 tuple_impls! { A B C D E F G H I J }
 tuple_impls! { A B C D E F G H I J K }
 tuple_impls! { A B C D E F G H I J K L }
+
+#[cfg(feature = "references")]
+mod references {
+    use super::{SelfRustTokenize, TokenStream};
+    use quote::quote;
+
+    impl<'a, T: SelfRustTokenize> SelfRustTokenize for &'a T {
+        fn to_tokens(&self) -> TokenStream {
+            let inner_tokens = (*self).to_tokens();
+            quote!(&#inner_tokens)
+        }
+    }
+
+    impl<'a, T: SelfRustTokenize> SelfRustTokenize for &'a mut T {
+        fn to_tokens(&self) -> TokenStream {
+            let inner_tokens = (**self).to_tokens();
+            quote!(&mut #inner_tokens)
+        }
+    }
+
+    impl<'a, T: SelfRustTokenize> SelfRustTokenize for &'a [T] {
+        fn to_tokens(&self) -> TokenStream {
+            let inner_tokens = self.iter().map(SelfRustTokenize::to_tokens);
+            quote!(&[#(#inner_tokens),*])
+        }
+    }
+
+    impl<'a, T: SelfRustTokenize> SelfRustTokenize for &'a mut [T] {
+        fn to_tokens(&self) -> TokenStream {
+            let inner_tokens = self.iter().map(SelfRustTokenize::to_tokens);
+            quote!(&mut [#(#inner_tokens),*])
+        }
+    }
+}
 
 #[cfg(feature = "smallvec")]
 impl<T: smallvec::Array> SelfRustTokenize for smallvec::SmallVec<T>

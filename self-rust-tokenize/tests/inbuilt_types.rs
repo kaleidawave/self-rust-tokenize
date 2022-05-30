@@ -50,8 +50,35 @@ fn tuples() {
     let tokens = SelfRustTokenize::to_tokens(&tup1);
     assert_eq!(
         tokens.to_string(),
-        quote!(("hello", Box::new(2i32))).to_string()
+        quote!(("hello", Box::new(2i32),)).to_string()
     );
+}
+
+#[cfg(feature = "references")]
+mod references {
+    use super::SelfRustTokenize;
+    use quote::quote;
+
+    #[test]
+    fn references() {
+        let tokens = SelfRustTokenize::to_tokens(&(&12i32));
+        assert_eq!(tokens.to_string(), quote!(&12i32).to_string());
+
+        let tokens = SelfRustTokenize::to_tokens(&(&mut 5i32));
+        assert_eq!(tokens.to_string(), quote!(&mut 5i32).to_string());
+    }
+
+    #[test]
+    fn slices() {
+        let mut array = ["hello", "test", "x"];
+        let slice1: &[&str] = &array[..2];
+        let tokens = SelfRustTokenize::to_tokens(&slice1);
+        assert_eq!(tokens.to_string(), quote!(&["hello", "test"]).to_string());
+
+        let slice2: &mut [&str] = &mut array[1..];
+        let tokens = SelfRustTokenize::to_tokens(&slice2);
+        assert_eq!(tokens.to_string(), quote!(&mut ["test", "x"]).to_string());
+    }
 }
 
 #[cfg(feature = "smallvec")]

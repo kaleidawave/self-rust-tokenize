@@ -20,3 +20,4 @@ smallvec = { version = "1", optional = true }
 
 [features]
 smallvec = ["dep:smallvec"]
+references = []

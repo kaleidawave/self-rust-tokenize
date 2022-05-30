@@ -56,6 +56,11 @@ SpecialStructure::generate_from_input("hello") === make_special_structure!("hell
 
 *note that the derived token stream is not scoped, you have to import the structures themselves*
 
+## Features
+
+- `smallvec`, adds implementation of `SelfRustTokenize` for `SmallVec` in the `smallvec` crate
+- `references`, adds implementation of `SelfRustTokenize` for immutable and mutable references and immutable and mutable slices. Note that for references the tokenization does not preserve the structure as pointer information is different in the tokenization of the new structure. e.g `ptr::eq` will behavior differently. (thus the reasoning for this being a opt-in feature)
+
 ### Why `self_rust_tokenize::SelfRustTokenize` trait and not `quote::ToTokens`?
 
 `quote::ToTokens` is defined on many types in std to return a more primitive representation of themselves and can lose their type structure. On the other hand `self_rust_tokenize::SelfRustTokenize` implementations on std types keeps the type constructor information. Thus a new trait (`self_rust_tokenize::SelfRustTokenize`) is needed to prevent implementation conflicts.
