@@ -1,6 +1,7 @@
-# Self rust tokenize
+# Self Rust Tokenize
 
 [![](https://img.shields.io/crates/v/self-rust-tokenize)](https://crates.io/crates/self-rust-tokenize)
+[![](https://img.shields.io/docsrs/self-rust-tokenize)](https://docs.rs/self-rust-tokenize/latest)
 
 For taking a instance of a structure and generating a `proc_macro2::TokenStream` of tokens which generate the structure.
 
@@ -62,7 +63,7 @@ SpecialStructure::generate_from_input("hello") == make_special_structure!("hello
 
 *note that the derived token stream is not scoped, you have to import the structures themselves*
 
-## Features
+## Cargo Features
 
 - `smallvec`, adds implementation of `SelfRustTokenize` for `SmallVec` in the `smallvec` crate
 - `references`, adds implementation of `SelfRustTokenize` for immutable and mutable references and immutable and mutable slices. Note that for references the tokenization does not preserve the structure as pointer information is different in the tokenization of the new structure. e.g `ptr::eq` will behavior differently. (thus the reasoning for this being a opt-in feature)

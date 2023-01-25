@@ -122,7 +122,10 @@ impl<T: SelfRustTokenize, const N: usize> SelfRustTokenize for [T; N] {
                 inner_token_stream.append(Punct::new(',', proc_macro2::Spacing::Alone));
             }
         }
-        token_stream.append(Group::new(proc_macro2::Delimiter::Bracket, inner_token_stream));
+        token_stream.append(Group::new(
+            proc_macro2::Delimiter::Bracket,
+            inner_token_stream,
+        ));
     }
 }
 
@@ -136,7 +139,10 @@ impl<T: SelfRustTokenize> SelfRustTokenize for [T] {
                 inner_token_stream.append(Punct::new(',', proc_macro2::Spacing::Alone));
             }
         }
-        token_stream.append(Group::new(proc_macro2::Delimiter::Bracket, inner_token_stream));
+        token_stream.append(Group::new(
+            proc_macro2::Delimiter::Bracket,
+            inner_token_stream,
+        ));
     }
 }
 
@@ -212,7 +218,10 @@ mod references {
                     inner_token_stream.append(Punct::new(',', proc_macro2::Spacing::Alone));
                 }
             }
-            token_stream.append(Group::new(proc_macro2::Delimiter::Bracket, inner_token_stream));
+            token_stream.append(Group::new(
+                proc_macro2::Delimiter::Bracket,
+                inner_token_stream,
+            ));
         }
     }
 
@@ -227,7 +236,10 @@ mod references {
                     inner_token_stream.append(Punct::new(',', proc_macro2::Spacing::Alone));
                 }
             }
-            token_stream.append(Group::new(proc_macro2::Delimiter::Bracket, inner_token_stream));
+            token_stream.append(Group::new(
+                proc_macro2::Delimiter::Bracket,
+                inner_token_stream,
+            ));
         }
     }
 }
@@ -238,7 +250,7 @@ where
     T::Item: SelfRustTokenize,
 {
     fn append_to_token_stream(&self, token_stream: &mut TokenStream) {
-        append_path(&["small_vec", "small_vec"], token_stream, true);
+        append_path(&["smallvec", "smallvec"], token_stream, true);
         token_stream.append(Punct::new('!', proc_macro2::Spacing::Alone));
         let mut inner_token_stream = TokenStream::new();
         for (idx, inner) in self.iter().enumerate() {
@@ -247,7 +259,10 @@ where
                 inner_token_stream.append(Punct::new(',', proc_macro2::Spacing::Alone));
             }
         }
-        token_stream.append(Group::new(proc_macro2::Delimiter::Bracket, inner_token_stream));
+        token_stream.append(Group::new(
+            proc_macro2::Delimiter::Bracket,
+            inner_token_stream,
+        ));
     }
 }
 
