@@ -5,32 +5,38 @@
 For taking a instance of a structure and generating a `proc_macro2::TokenStream` of tokens which generate the structure.
 
 ```rust
-self_rust_tokenize::SelfRustTokenize::to_tokens(String::new("Hello")) === quote!(String::new("Hello"));
+assert_eq!(
+    self_rust_tokenize::SelfRustTokenize::to_tokens(&String::from("Hello")).to_string(),
+    self_rust_tokenize::quote!(::std::string::String::from("Hello")).to_string()
+);
 ```
 
 Deriving on a custom type
 
 ```rust
-#[derive(SelfRustTokenize)]
-struct A(i32);
+#[derive(self_rust_tokenize::SelfRustTokenize)]
+struct A(pub i32);
 
 let a = A(12);
-self_rust_tokenize::SelfRustTokenize::to_tokens(a) == quote!(A(12));
+assert_eq!(
+    self_rust_tokenize::SelfRustTokenize::to_tokens(&a).to_string(),
+    self_rust_tokenize::quote!(A(12i32,)).to_string()
+);
 ```
 
 The use case may be: sharing a structure between a crate that deals with instances of it and a proc macro crate which generates tokens that build the instances in a exported proc macro.
 
 It can be used for doing constant compilation of structures that allocate due to the nature of the structure. (this crate was built for the partial constant compilation of abstract syntax trees).
 
-```rust
+```ignore
 /// Base definition crate
-pub enum SpecialStructure { 
+pub struct SpecialStructure { 
     // ...
 }
 
 impl SpecialStructure {
     pub fn generate_from_input(&str) -> Self {
-        // Some long implementation
+        // some long implementation
     }
 }
 
@@ -42,16 +48,16 @@ pub fn make_special_structure(item: TokenStream) -> TokenStream {
     let input = parse_macro_input!(item as LitStr).value();
     let instance = SpecialStructure::generate_from_input(&input);
     let instance_constructor = instance.to_tokens();
-    (quote! {
+    quote! {
         {
             use ::base_crate::SpecialStructure;
             #instance_constructor
         }
-    }).into()
+    }.into()
 }
 
 /// Main crate
-SpecialStructure::generate_from_input("hello") === make_special_structure!("hello")
+SpecialStructure::generate_from_input("hello") == make_special_structure!("hello")
 ```
 
 *note that the derived token stream is not scoped, you have to import the structures themselves*
@@ -67,7 +73,8 @@ SpecialStructure::generate_from_input("hello") === make_special_structure!("hell
 
 e.g.
 
-```rust
-self_rust_tokenize::SelfRustTokenize::to_tokens(String::new("Hello")) === quote!(String::new("Hello"));
-quote::ToTokens::to_tokens(String::new("Hello")) === quote!("Hello");
+```ignore
+let hello_string = String::new("Hello");
+self_rust_tokenize::SelfRustTokenize::to_tokens(hello_string) == quote!(::std::string::String::new("Hello"));
+quote::ToTokens::to_tokens(hello_string) == quote!("Hello");
 ```

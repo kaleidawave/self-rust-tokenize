@@ -13,9 +13,9 @@ fn variant() {
     assert_eq!(X::A.to_tokens().to_string(), quote!(X::A).to_string());
     assert_eq!(
         X::B("Hello World".into()).to_tokens().to_string(),
-        quote!(X::B(String::from("Hello World"),)).to_string()
+        quote!(X::B(::std::string::String::from("Hello World"),)).to_string()
     );
-    // rustfmt removes the trailing comma in the quote 🥶
+    // rustfmt removes the trailing comma in the quote! 🥶
     #[rustfmt::skip]
     assert_eq!(
         X::C { m: false, n: 45 }.to_tokens().to_string(),

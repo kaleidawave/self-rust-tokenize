@@ -18,7 +18,7 @@ fn strings() {
     let tokens = SelfRustTokenize::to_tokens(&string1);
     assert_eq!(
         tokens.to_string(),
-        quote!(String::from("Hello")).to_string()
+        quote!(::std::string::String::from("Hello")).to_string()
     );
 }
 
@@ -28,7 +28,7 @@ fn vec() {
     let tokens = SelfRustTokenize::to_tokens(&vec1);
     assert_eq!(
         tokens.to_string(),
-        quote!(vec!["hello", "test"]).to_string()
+        quote!(::std::vec!["hello", "test"]).to_string()
     );
 }
 
@@ -50,7 +50,7 @@ fn tuples() {
     let tokens = SelfRustTokenize::to_tokens(&tup1);
     assert_eq!(
         tokens.to_string(),
-        quote!(("hello", Box::new(2i32),)).to_string()
+        quote!(("hello", ::std::boxed::Box::new(2i32),)).to_string()
     );
 }
 
