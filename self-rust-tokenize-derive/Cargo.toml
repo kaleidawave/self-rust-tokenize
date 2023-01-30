@@ -15,4 +15,4 @@ proc-macro = true
 
 [dependencies]
 syn = { version = "1.0.81", features = ["full", "extra-traits"] }
-syn-helpers = "0.4.1"
+syn-helpers = "0.4.2"
