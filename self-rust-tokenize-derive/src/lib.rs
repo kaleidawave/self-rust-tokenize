@@ -31,7 +31,7 @@ pub fn self_rust_tokenize(input: TokenStream) -> TokenStream {
                 }
 
                 let segments =
-                    constructable.get_path().segments.into_iter().map(|seg| Literal::string(&seg.ident.to_string()));
+                    constructable.get_constructor_path().segments.into_iter().map(|seg| Literal::string(&seg.ident.to_string()));
 
                 let call = match constructable.get_fields_mut() {
                     Fields::Named(named, _) => {

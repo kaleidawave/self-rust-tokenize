@@ -43,5 +43,5 @@ jobs:
         uses: dusmartijngames/discord-webhook-notify@master
         with:
           severity: info
-          text: "Released version ${{ steps.release.outputs.new-version }}"
+          text: "Released version ${{ steps.release.outputs.new-versions-description }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_ENDPOINT }}
