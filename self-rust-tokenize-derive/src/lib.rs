@@ -7,7 +7,13 @@ use syn_helpers::{
     Constructable, FieldMut, Fields, Item, Trait, TraitItem, TypeOfSelf,
 };
 
-#[proc_macro_derive(SelfRustTokenize, attributes(panic_on_self_tokenize))]
+const PANIC_ON_SELF_TOKENIZE: &str = "panic_on_self_tokenize";
+const SINGLE_FIELD: &str = "self_tokenize_field";
+
+#[proc_macro_derive(
+    SelfRustTokenize,
+    attributes(panic_on_self_tokenize, self_tokenize_field)
+)]
 pub fn self_rust_tokenize(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
 
@@ -21,13 +27,32 @@ pub fn self_rust_tokenize(input: TokenStream) -> TokenStream {
         None,
         |mut item: Item| {
             item.map_constructable(|mut constructable| {
-                if constructable
+                let attributes = &constructable
                     .get_fields()
-                    .get_field_attributes()
+                    .get_field_attributes();
+
+                if attributes
                     .iter()
-                    .any(|attr| attr.path.is_ident("panic_on_self_tokenize"))
+                    .any(|attr| attr.path.is_ident(PANIC_ON_SELF_TOKENIZE) )
                 {
-                    return Ok(vec![parse_quote!(panic!();)]);
+                    return Ok(vec![parse_quote!(panic!("Item not self-tokenize-able");)]);
+                }
+
+                if let Some(attribute) = attributes
+                    .iter()
+                    .find(|attr| attr.path.is_ident(SINGLE_FIELD))
+                {
+                    let member = attribute.parse_args::<syn::Member>()?;
+
+                    let mut field = constructable.get_fields_mut().get_field_by_member_mut(member).ok_or_else(|| "could not find the field")?;
+
+                    let reference = field.get_reference();
+
+                    let call = parse_quote!(
+                        ::self_rust_tokenize::SelfRustTokenize::append_to_token_stream(#reference, token_stream);
+                    );
+
+                    return Ok(vec![call]);
                 }
 
                 let segments =
