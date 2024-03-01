@@ -3,7 +3,7 @@ use syn_helpers::{
     derive_trait,
     proc_macro2::{Ident, Literal, Span},
     quote,
-    syn::{parse_macro_input, parse_quote, DeriveInput},
+    syn::{parse_macro_input, parse_quote, DeriveInput, Member},
     Constructable, FieldMut, Fields, Item, Trait, TraitItem, TypeOfSelf,
 };
 
@@ -33,18 +33,18 @@ pub fn self_rust_tokenize(input: TokenStream) -> TokenStream {
 
                 if attributes
                     .iter()
-                    .any(|attr| attr.path.is_ident(PANIC_ON_SELF_TOKENIZE) )
+                    .any(|attr| attr.path().is_ident(PANIC_ON_SELF_TOKENIZE) )
                 {
                     return Ok(vec![parse_quote!(panic!("Item not self-tokenize-able");)]);
                 }
 
                 if let Some(attribute) = attributes
                     .iter()
-                    .find(|attr| attr.path.is_ident(SINGLE_FIELD))
+                    .find(|attr| attr.path().is_ident(SINGLE_FIELD))
                 {
-                    let member = attribute.parse_args::<syn::Member>()?;
+                    let member = attribute.parse_args::<Member>()?;
 
-                    let mut field = constructable.get_fields_mut().get_field_by_member_mut(member).ok_or_else(|| "could not find the field")?;
+                    let mut field = constructable.get_fields_mut().get_field_by_member_mut(member).ok_or("could not find the field")?;
 
                     let reference = field.get_reference();
 

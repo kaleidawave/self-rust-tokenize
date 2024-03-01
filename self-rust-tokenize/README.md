@@ -1,7 +1,7 @@
 # Self Rust Tokenize
 
-[![](https://img.shields.io/crates/v/self-rust-tokenize)](https://crates.io/crates/self-rust-tokenize)
-[![](https://img.shields.io/docsrs/self-rust-tokenize)](https://docs.rs/self-rust-tokenize/latest)
+[![crates.io badge](https://img.shields.io/crates/v/self-rust-tokenize?style=flat-square)](https://crates.io/crates/self-rust-tokenize)
+[![docs.rs badge](https://img.shields.io/docsrs/self-rust-tokenize?style=flat-square)](https://docs.rs/self-rust-tokenize/latest)
 
 For taking a instance of a structure and generating a `proc_macro2::TokenStream` of tokens which generate the structure.
 
