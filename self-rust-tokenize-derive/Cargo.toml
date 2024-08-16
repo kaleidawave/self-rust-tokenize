@@ -8,7 +8,7 @@ edition = "2018"
 repository = "https://github.com/kaleidawave/self-rust-tokenize"
 
 [lib]
-path = "lib.rs"
+path = "macro.rs"
 name = "self_rust_tokenize_derive"
 proc-macro = true
 

@@ -8,7 +8,7 @@ For taking a instance of a structure and generating a `proc_macro2::TokenStream`
 ```rust
 assert_eq!(
     self_rust_tokenize::SelfRustTokenize::to_tokens(&String::from("Hello")).to_string(),
-    self_rust_tokenize::quote!(::std::string::String::from("Hello")).to_string()
+    self_rust_tokenize::helpers::quote!(::std::string::String::from("Hello")).to_string()
 );
 ```
 
@@ -21,7 +21,7 @@ struct A(pub i32);
 let a = A(12);
 assert_eq!(
     self_rust_tokenize::SelfRustTokenize::to_tokens(&a).to_string(),
-    self_rust_tokenize::quote!(A(12i32,)).to_string()
+    self_rust_tokenize::helpers::quote!(A(12i32,)).to_string()
 );
 ```
 

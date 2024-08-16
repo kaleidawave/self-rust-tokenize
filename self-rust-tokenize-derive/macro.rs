@@ -22,7 +22,7 @@ pub fn self_rust_tokenize(input: TokenStream) -> TokenStream {
         None,
         TypeOfSelf::Reference,
         vec![parse_quote!(
-            token_stream: &mut ::self_rust_tokenize::proc_macro2::TokenStream
+            token_stream: &mut ::self_rust_tokenize::helpers::TokenStream
         )],
         None,
         |mut item: Item| {
