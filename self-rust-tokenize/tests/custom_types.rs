@@ -29,16 +29,20 @@ fn self_tokenize_field() {
 
     #[derive(SelfRustTokenize)]
     #[self_tokenize_field(actual_field)]
-    struct Wrapper1<T> {
+    struct Wrapper1<T, U> {
         ignored_field: String,
         another_ignored_field: u32,
         actual_field: T,
+        another: std::marker::PhantomData<U>,
     }
 
-    let w1 = Wrapper1 {
+    struct DoesNotImplementSelfRustTokenize;
+
+    let w1: Wrapper1<u32, DoesNotImplementSelfRustTokenize> = Wrapper1 {
         ignored_field: Default::default(),
         another_ignored_field: Default::default(),
-        actual_field: 200u32,
+        actual_field: 200,
+        another: Default::default(),
     };
 
     assert_eq!(w1.to_tokens().to_string(), quote!(200u32).to_string());

@@ -197,7 +197,7 @@ tuple_impls! { A B C D E F G H I J K L }
 #[cfg(feature = "references")]
 mod references {
     use super::{SelfRustTokenize, TokenStream};
-    use proc_macro2::{Group, Ident, Punct, Span};
+    use proc_macro2::{Delimiter, Group, Ident, Punct, Spacing, Span};
     use quote::TokenStreamExt;
 
     impl<'a, T: SelfRustTokenize> SelfRustTokenize for &'a T {
